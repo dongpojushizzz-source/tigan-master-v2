@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#030611" />
+    <meta name="description" content="《题感大师》V1.9测试数据中心：汇总启动、访问路径、牌局表现、错误分布与体验反馈。" />
+    <title>题感大师｜V1.9测试数据中心</title>
+    <link rel="stylesheet" href="data-center.css" />
+  </head>
+  <body>
+    <div class="cosmos-backdrop" aria-hidden="true"></div>
+    <header class="data-header">
+      <a class="back-link" href="index.html" aria-label="返回游戏">←</a>
+      <div class="data-brand"><span>DATA OBSERVATORY · V1.9</span><h1>题感大师测试数据中心</h1></div>
+      <div class="header-actions">
+        <button id="loadDeviceData" type="button">读取本机记录</button>
+        <button id="importData" class="primary-action" type="button">导入测试数据</button>
+        <input id="fileInput" type="file" accept=".json,.csv,application/json,text/csv" multiple hidden />
+      </div>
+    </header>
+
+    <main class="data-shell">
+      <section class="overview-banner">
+        <div><p class="eyebrow">PLAYTEST RESEARCH CONSOLE</p><h2>判断玩家是在答题，还是在破解隐藏规律</h2><p id="datasetStatus">正在读取当前设备上的测试记录……</p></div>
+        <div class="dataset-actions">
+          <button id="exportSummary" type="button">导出汇总 CSV</button>
+          <button id="clearImported" class="danger-action" type="button">清空已导入数据</button>
+        </div>
+      </section>
+
+      <section id="dropZone" class="drop-zone" tabindex="0">
+        <strong>把多个测试者导出的 JSON 或 CSV 拖到这里</strong>
+        <span>系统按事件ID自动去重；导入数据只保存在这台分析设备。</span>
+      </section>
+
+      <section class="filter-panel" aria-label="数据筛选">
+        <label>参与者<select id="participantFilter"><option value="">全部参与者</option></select></label>
+        <label>学科<select id="subjectFilter"><option value="">全部学科</option></select></label>
+        <label>模式<select id="modeFilter"><option value="">全部模式</option></select></label>
+        <label>年级<select id="gradeFilter"><option value="">全部年级</option><option>高一</option><option>高二</option><option>高三</option></select></label>
+        <label>称号等级<select id="rankFilter"><option value="">全部称号等级</option></select></label>
+        <label>开始日期<input id="dateFrom" type="date" /></label>
+        <label>结束日期<input id="dateTo" type="date" /></label>
+        <button id="resetFilters" type="button">重置筛选</button>
+      </section>
+
+      <section id="emptyState" class="empty-state" hidden>
+        <i>◇</i><h2>还没有可分析的数据</h2><p>先从当前设备读取记录，或导入测试者在个人中心导出的JSON/CSV文件。</p>
+      </section>
+
+      <div id="dashboardContent">
+        <section class="kpi-grid" aria-label="核心指标">
+          <article><small>启动次数</small><b id="kpiStarts">0</b><span id="kpiSessions">0个会话</span></article>
+          <article><small>测试参与者</small><b id="kpiParticipants">0</b><span>去标识化ID</span></article>
+          <article><small>牌局完成率</small><b id="kpiCompletion">0%</b><span id="kpiRounds">0 / 0局</span></article>
+          <article><small>平均完成时间</small><b id="kpiDuration">—</b><span>成功牌局</span></article>
+          <article><small>成功前尝试</small><b id="kpiAttempts">—</b><span>平均次数</span></article>
+          <article><small>提示接受率</small><b id="kpiHintRate">—</b><span id="kpiHints">0 / 0次</span></article>
+          <article><small>五败揭晓率</small><b id="kpiRevealRate">—</b><span id="kpiReveals">0次</span></article>
+          <article><small>中途退出率</small><b id="kpiAbandonRate">—</b><span id="kpiAbandons">0次</span></article>
+        </section>
+
+        <section class="panel access-panel">
+          <header><div><p class="eyebrow">SCREEN FLOW</p><h2>界面访问顺序</h2></div><span id="screenViewCount">0次界面访问</span></header>
+          <div class="split-grid">
+            <div><h3>最常见页面流转</h3><div id="transitionList" class="bar-list"></div></div>
+            <div><h3>各界面访问量</h3><div id="screenVisitList" class="bar-list"></div></div>
+          </div>
+          <div class="detail-table">
+            <h3>最近会话完整路径</h3>
+            <div class="table-wrap"><table><thead><tr><th>时间</th><th>参与者</th><th>会话</th><th>访问顺序</th></tr></thead><tbody id="sessionPathTable"></tbody></table></div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <header><div><p class="eyebrow">SUBJECT PERFORMANCE</p><h2>科目选择率与成功率</h2></div><span>错误=失败的羁绊验证</span></header>
+          <div class="table-wrap"><table><thead><tr><th>学科</th><th>选择次数</th><th>选择率</th><th>开始牌局</th><th>成功牌局</th><th>成功率</th><th>错误验证</th><th>平均尝试</th></tr></thead><tbody id="subjectTable"></tbody></table></div>
+        </section>
+
+        <section class="panel">
+          <header><div><p class="eyebrow">BOND VERIFICATION LOG</p><h2>每次羁绊验证明细</h2></div><span id="verificationCount">0次验证</span></header>
+          <div class="table-wrap verification-table"><table><thead><tr><th>时间</th><th>参与者</th><th>称号等级</th><th>学科</th><th>牌局</th><th>尝试</th><th>选择数量</th><th>成功</th><th>所选卡牌ID</th><th>当时用时</th></tr></thead><tbody id="verificationTable"></tbody></table></div>
+        </section>
+
+        <section class="panel">
+          <header><div><p class="eyebrow">COGNITIVE RANK</p><h2>用户称号等级分布</h2></div><span>按事件发生时的等级统计</span></header>
+          <div class="table-wrap"><table><thead><tr><th>等级</th><th>称号</th><th>到达人数</th><th>记录事件</th><th>开始牌局</th><th>完成牌局</th><th>成功率</th></tr></thead><tbody id="rankTable"></tbody></table></div>
+        </section>
+
+        <section class="dual-panels">
+          <section class="panel">
+            <header><div><p class="eyebrow">MODE PERFORMANCE</p><h2>模式表现</h2></div></header>
+            <div class="table-wrap"><table><thead><tr><th>模式</th><th>开始</th><th>成功</th><th>成功率</th><th>错误</th></tr></thead><tbody id="modeTable"></tbody></table></div>
+          </section>
+          <section class="panel">
+            <header><div><p class="eyebrow">GRADE PERFORMANCE</p><h2>年级表现</h2></div></header>
+            <div class="table-wrap"><table><thead><tr><th>年级</th><th>牌局</th><th>成功</th><th>成功率</th><th>平均用时</th></tr></thead><tbody id="gradeTable"></tbody></table></div>
+          </section>
+        </section>
+
+        <section class="dual-panels">
+          <section class="panel">
+            <header><div><p class="eyebrow">ERROR DISTRIBUTION</p><h2>错误集中在哪个知识板块</h2></div><span id="failedVerifyCount">0次错误验证</span></header>
+            <div id="errorBlockList" class="rank-list"></div>
+          </section>
+          <section class="panel">
+            <header><div><p class="eyebrow">RELATION SCALE</p><h2>牌数与关系规模分布</h2></div></header>
+            <div class="split-grid compact"><div><h3>每局牌数</h3><div id="cardCountList" class="bar-list"></div></div><div><h3>主要关系规模</h3><div id="relationSizeList" class="bar-list"></div></div></div>
+          </section>
+        </section>
+
+        <section class="panel">
+          <header><div><p class="eyebrow">PLAYER SIGNAL</p><h2>主观体验评分</h2></div><span id="surveyCount">0份问卷</span></header>
+          <div class="score-grid">
+            <article><span>规律感</span><b id="scorePattern">—</b><i><em id="barPattern"></em></i></article>
+            <article><span>趣味与爽感</span><b id="scoreFun">—</b><i><em id="barFun"></em></i></article>
+            <article><span>规则清晰度</span><b id="scoreClarity">—</b><i><em id="barClarity"></em></i></article>
+            <article><span>难度适配</span><b id="scoreDifficulty">—</b><i><em id="barDifficulty"></em></i></article>
+            <article><span>继续游玩意愿</span><b id="scoreContinue">—</b><i><em id="barContinue"></em></i></article>
+          </div>
+          <div class="split-grid survey-detail"><div><h3>偏好模式</h3><div id="favoriteModeList" class="bar-list"></div></div><div><h3>最近开放反馈</h3><div id="surveyComments" class="comment-list"></div></div></div>
+        </section>
+
+        <section class="dual-panels">
+          <section class="panel">
+            <header><div><p class="eyebrow">RUNTIME ERRORS</p><h2>简短运行错误</h2></div><span id="runtimeErrorCount">0条</span></header>
+            <div id="runtimeErrorList" class="log-list"></div>
+          </section>
+          <section class="panel">
+            <header><div><p class="eyebrow">RECENT EVENTS</p><h2>最近事件记录</h2></div><span>最多显示80条</span></header>
+            <div id="recentEventList" class="log-list"></div>
+          </section>
+        </section>
+      </div>
+    </main>
+
+    <div id="dashboardToast" class="dashboard-toast" role="status" aria-live="polite"></div>
+    <script src="telemetry-config.js"></script>
+    <script src="telemetry.js"></script>
+    <script src="data.js"></script>
+    <script src="data-center.js"></script>
+  </body>
+</html>
