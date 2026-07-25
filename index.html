@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#030611" />
+  <meta name="description" content="《题感大师》网页游戏测试版 V2.0：接入2015—2025高考历史真题认知结构证据库。" />
+  <title>题感大师｜测试版 V2.0</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="launch-v7.css" />
+    <link rel="stylesheet" href="telemetry.css" />
+  </head>
+  <body>
+    <canvas id="globalStars" class="global-stars" aria-hidden="true"></canvas>
+    <main id="app" class="app">
+      <section id="launchScreen" class="screen launch-screen is-active" role="button" tabindex="0" aria-label="题感大师游戏启动页，点击屏幕进入">
+        <div id="launchStage" class="stage">
+          <img class="launch-background" src="assets/launch-v7-background.png" alt="" draggable="false" />
+          <header class="title-layer" aria-label="题感大师"><h1 id="launchTitleGlitch" class="glitch-title"><span class="sr-only">题感大师</span></h1></header>
+          <div class="ui-layer">
+            <section class="loading-bar-layer" aria-label="正在寻找考试中的第六感">
+              <div class="loading-bar">
+                <span class="tech-wing tech-wing--left" aria-hidden="true"><i></i><i></i><i></i></span>
+                <span class="status-core" aria-hidden="true"><i class="status-core__inner"></i></span>
+                <p class="loading-copy">正在寻找考试中的第六感</p>
+                <span class="signal-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+                <span class="tech-wing tech-wing--right" aria-hidden="true"><i></i><i></i><i></i></span>
+                <span class="loading-sweep" aria-hidden="true"></span>
+              </div>
+            </section>
+            <div class="enter-text-layer" aria-hidden="true"><span class="enter-copy">点击屏幕进入</span></div>
+            <footer class="hud-layer" aria-hidden="true">
+              <span class="hud-scan"></span>
+              <div class="hud-module hud-module--left"><span class="hud-ring"><i></i></span><div class="hud-copy"><b>KNOWLEDGE LINK</b><span>知识图谱 · ONLINE</span></div><span class="hud-wave"><i></i><i></i><i></i><i></i><i></i></span></div>
+              <div class="hud-center"><span></span><span></span><span></span><span></span><span></span><i></i><span></span><span></span><span></span><span></span><span></span></div>
+              <div class="hud-module hud-module--right"><span class="hud-wave"><i></i><i></i><i></i><i></i><i></i></span><div class="hud-copy"><b>ABILITY SYSTEM</b><span>能力模型 · READY</span></div><span class="hud-signal"><i></i><i></i><i></i><i></i></span></div>
+            </footer>
+          </div>
+          <div id="launchFlash" class="screen-flash" aria-hidden="true"></div>
+          <div id="rippleLayer" class="ripple-layer" aria-hidden="true"></div>
+          <p id="screenStatus" class="sr-only" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <section id="subjectScreen" class="screen app-screen subject-screen" hidden aria-labelledby="subjectTitle">
+        <img class="oracle-scene" src="assets/oracle-observatory-v3.png" alt="星轨观测员手持塔罗牌站在知识观测站中" />
+        <div class="subject-shade" aria-hidden="true"></div>
+        <header class="flow-header">
+          <button id="subjectBack" class="back-arrow" type="button" aria-label="返回启动页">←</button>
+          <div class="flow-step"><i>01</i><span><b>唤醒知识星座</b><small>CHOOSE YOUR CONSTELLATION</small></span></div>
+          <p>九科不是菜单，而是九种观察世界的方法。</p>
+        </header>
+        <div class="subject-stage">
+          <section class="subject-copy">
+            <p class="eyebrow">THE CELESTIAL ARCHIVE</p>
+            <h1 id="subjectTitle">选择一片<br />知识星域</h1>
+            <div id="subjectEmblemPreview" class="subject-emblem-preview" aria-hidden="true"><i></i><i></i><i></i><canvas id="previewConstellation" class="subject-constellation-preview" data-constellation="history"></canvas><span id="previewSigil">⌛</span></div>
+            <p id="subjectIntro" class="subject-short-copy">时间、制度与因果</p>
+          </section>
+          <div id="subjectConstellation" class="subject-constellation" aria-label="九科学科选择"></div>
+          <aside class="subject-confirm">
+            <span id="subjectGlyph">史</span><p><small>SELECTED DOMAIN</small><b id="subjectName">历史</b><em id="subjectEnglish">HISTORY</em></p>
+            <button id="confirmSubject" class="ritual-button" type="button"><b>进入模式圣殿</b><small>CONFIRM CONSTELLATION</small><i>↗</i></button>
+          </aside>
+        </div>
+      </section>
+
+      <section id="modeScreen" class="screen app-screen mode-screen" hidden aria-labelledby="modeTitle">
+        <div class="mode-nebula" aria-hidden="true"><i></i><i></i><i></i></div>
+        <header class="flow-header">
+          <button id="modeBack" class="back-arrow" type="button" aria-label="返回选科">←</button>
+          <div class="flow-step"><i>02</i><span><b>选择解码仪式</b><small>CHOOSE THE RITUAL</small></span></div>
+          <p id="modeSubjectLabel">历史星域已连接</p>
+        </header>
+        <section class="mode-stage">
+          <div class="mode-heading"><p class="eyebrow">FOUR WAYS TO SEE</p><h1 id="modeTitle">你想怎样<br />接近规律？</h1><p>难度不只是数字，它会改变干扰方式与理解任务。</p></div>
+          <div id="modeGates" class="mode-gates" aria-label="四种游戏模式"></div>
+          <footer class="mode-footer"><p><small>当前仪式</small><b id="modeName">困难模式</b><span id="modeDescription"></span></p><button id="confirmMode" class="ritual-button" type="button"><b>进入认知中枢</b><small>ENTER THE NEXUS</small><i>↗</i></button></footer>
+        </section>
+      </section>
+
+      <section id="homeScreen" class="screen app-screen nexus-screen" hidden aria-labelledby="homeTitle">
+        <div class="nexus-background" aria-hidden="true"></div>
+        <header class="app-header">
+          <button id="homeBack" class="back-arrow" type="button" aria-label="返回模式选择">←</button>
+        <div class="app-brand"><span>TM</span><p><b>题感大师</b><small>COGNITIVE NEXUS · V2.0 HISTORY EXAM LAB</small></p></div>
+          <nav class="header-nav"><button id="reselectSubject" type="button">更换学科</button><button id="reselectMode" type="button">更换模式</button><button id="openMap" type="button">✦ 探索地图</button><button id="openProfile" type="button">◇ 个人中心</button></nav>
+          <button id="profileChip" class="profile-chip" type="button"><span id="homeAvatar">观</span><p><b id="homeNickname">星轨观察者</b><small id="homeLevel">LV.01 · 题目观察者</small></p></button>
+        </header>
+        <div class="nexus-layout">
+          <section class="nexus-hero">
+            <p class="eyebrow">COGNITIVE TRACE READY</p>
+            <h1 id="homeTitle">关系不会写在<br />题目表面。</h1>
+            <p>观察、怀疑、组合。把看似无关的题卡放到一起，看看你的解释能否让它们同时成立。</p>
+            <div class="nexus-stats"><span><small>完成牌局</small><b id="sessionRounds">0</b></span><span><small>已发现羁绊</small><b id="todayDiscoveries">0</b></span><span><small>探索值</small><b id="homeXp">0</b></span></div>
+          </section>
+          <section class="current-training">
+            <div id="selectedSubjectOrb" class="training-orb"><i></i><span id="selectedSubjectGlyph">史</span></div>
+            <p class="eyebrow">CURRENT CONSTELLATION</p><h2 id="selectedSubjectName">历史</h2><b id="selectedModeName">困难模式</b><p id="selectedModeDescription"></p>
+            <div class="bank-proof"><i>100</i><p><b>场独立牌局已装载</b><small>每局随机出现 3–8 张牌，组合规模由关系本身决定。</small></p></div>
+            <button id="startGame" class="ritual-button ritual-button--large" type="button"><b>抽取本局星牌</b><small>DRAW THE NEXT TRACE</small><i>↗</i></button>
+          </section>
+          <aside class="nexus-oracle"><img src="assets/oracle-observatory-v3.png" alt="" /><div><small>ORACLE NOTE</small><b>别数牌，先找解释力。</b><p>能够同时解释两张牌，也可能是一条真正羁绊；选择权始终在你。</p></div></aside>
+        </div>
+      </section>
+
+      <section id="gameScreen" class="screen app-screen game-screen" hidden aria-labelledby="gameTitle">
+        <div class="game-anime-backdrop" aria-hidden="true"></div>
+        <header class="game-header"><button id="leaveGame" class="back-arrow" type="button" aria-label="退出牌局">←</button><div class="game-heading"><span id="gameMeta">HISTORY · DEEP TRACE</span><h1 id="gameTitle">历史 · 困难模式</h1></div><div class="game-stats"><span>探索值 <b id="gameXp">0</b></span><span>本次旅程 <b id="gameRoundNumber">01</b></span><span>星牌 <b id="gameCardCount">6</b></span></div></header>
+        <section class="mission-bar"><span class="mission-sigil"><i></i></span><div><small>本局目标</small><b id="missionCopy">自由选择你认为存在共同关系的卡牌</b></div><p id="modeRule">组合 2–8 张；提交前可随时调整。</p></section>
+        <section id="board" class="board" aria-label="题目卡牌区"><canvas id="bondCanvas" class="bond-canvas" aria-hidden="true"></canvas><div id="ritualHalo" class="ritual-halo" aria-hidden="true"><i></i><i></i><span>✦</span></div><div id="cardGrid" class="card-grid"></div></section>
+        <footer class="action-dock"><div class="selection-status"><span><b id="selectedCount">0</b><small>已选择</small></span><p><b id="selectionTitle">等待你的关系假设</b><small id="selectionHint">每局牌数不同，羁绊数量不会提前提示</small></p></div><div class="dock-actions"><button id="inspectHint" class="ghost-button" type="button">观察方法</button><button id="clearSelection" class="ghost-button" type="button" disabled>清空</button><button id="verifyBond" class="verify-button" type="button" disabled><span>组合羁绊</span><small>COMMUNE WITH CARDS</small><i></i></button></div></footer>
+
+        <div id="guidePanel" class="modal guide-panel" role="dialog" aria-modal="true" aria-labelledby="guideTitle" hidden><span class="modal-index">FIRST DIVINATION</span><h2 id="guideTitle">这里没有规定答案牌数</h2><p>阅读 3–8 张随机题卡，自由选择 2–8 张。只要你选择的牌共享一条能够成立的关系，羁绊就会回应。</p><div class="guide-flow"><span><i>1</i>观察</span><em>›</em><span><i>2</i>组合</span><em>›</em><span><i>3</i>见证翻牌</span></div><p class="guide-once">本引导只在首次牌局自动出现，可在个人中心重置。</p><button id="closeGuide" class="ritual-button ritual-button--compact" type="button"><b>开始占测</b><i>↗</i></button></div>
+        <div id="methodPanel" class="modal method-panel" role="dialog" aria-modal="true" aria-labelledby="methodTitle" hidden><button class="modal-close" data-close-modal="methodPanel" type="button">×</button><span class="modal-index">OBSERVATION METHOD</span><h2 id="methodTitle">别找相同字，找同一种解释</h2><div class="method-grid"><span><b>主体</b><small>谁或什么对象</small></span><span><b>机制</b><small>为什么发生</small></span><span><b>边界</b><small>限定条件是什么</small></span><span><b>意图</b><small>命题人要辨别什么</small></span></div></div>
+        <div id="hintOfferPanel" class="modal hint-offer-panel" role="dialog" aria-modal="true" aria-labelledby="hintOfferTitle" hidden><span class="hint-star" aria-hidden="true">✦</span><p class="eyebrow">A FAINT SIGNAL</p><h2 id="hintOfferTitle">星轨传来微弱回声</h2><p>已经尝试三次。需要接收一条不揭示答案的观察提示吗？</p><div id="hintWhisper" class="hint-whisper" hidden><small>低强度提示</small><b id="hintWhisperText"></b></div><div class="hint-actions"><button id="declineHint" class="ghost-button" type="button">暂时不用</button><button id="acceptHint" class="ritual-button ritual-button--compact" type="button"><b>听取提示</b></button><button id="closeHint" class="ritual-button ritual-button--compact" type="button" hidden><b>回到牌桌</b></button></div></div>
+      <div id="revealPanel" class="modal reveal-panel" role="dialog" aria-modal="true" aria-labelledby="revealTitle" hidden><p class="eyebrow">THE CARDS HAVE SPOKEN</p><h2 id="revealTitle"></h2><p id="revealExplanation"></p><div class="feedback-grid"><section><small>1 · 结论</small><p id="feedbackConclusion"></p></section><section><small>2 · 逐卡证据</small><ul id="feedbackEvidence"></ul></section><section><small>3 · 规则</small><p id="feedbackRule"></p></section><section><small>4 · 迁移</small><p id="feedbackTransfer"></p></section></div><div class="insight-copy"><small>瞬间理解</small><b id="insightText"></b></div><div class="reward-row"><span>探索值 <b id="rewardXp">+12</b></span><span>星图节点 <b>+1</b></span><span>关系迁移 <b>+1</b></span></div><section id="modeChallenge" class="mode-challenge" hidden><small id="challengeLabel"></small><h3 id="challengeTitle"></h3><div id="challengeOptions" class="challenge-options"></div><textarea id="masterNote" rows="2" placeholder="可选：写下一句你的判断方法"></textarea><textarea id="decodeAnswer" rows="3" minlength="6" maxlength="180" placeholder="写下你的判断：出题人为什么把这些题放在一起？"></textarea><p id="decodeAnswerStatus" class="decode-answer-status">写出自己的解释即可继续，不自动判分。</p></section><div class="reveal-actions"><button id="openSurveyAfterRound" class="ghost-button" type="button">反馈本轮体验</button><button id="viewMapAfterRound" class="ghost-button" type="button">查看星图</button><button id="nextRound" class="ritual-button ritual-button--compact" type="button"><b>继续抽牌</b><i>↗</i></button></div></div>
+      <div id="errorFeedbackPanel" class="modal error-feedback-panel" role="dialog" aria-modal="true" aria-labelledby="errorFeedbackLabel" hidden><button class="modal-close" data-close-modal="errorFeedbackPanel" type="button" aria-label="关闭">×</button><p class="eyebrow">RELATION BOUNDARY</p><h2 id="errorFeedbackLabel">首次错误提示</h2><p id="errorFeedbackText"></p></div>
+        <div id="cardInspect" class="modal card-inspect" role="dialog" aria-modal="true" aria-labelledby="inspectTitle" hidden><button class="modal-close" data-close-modal="cardInspect" type="button">×</button><span id="inspectNumber" class="modal-index"></span><h2 id="inspectTitle"></h2><p>放大阅读不会改变当前选择。</p></div>
+      </section>
+
+      <section id="mapScreen" class="screen app-screen map-screen" hidden aria-labelledby="mapTitle">
+        <div class="map-void" aria-hidden="true"></div>
+        <header class="section-header"><button id="mapBack" class="back-arrow" type="button" aria-label="返回上一界面">←</button><div><span>VARIABLE COSMOS ATLAS</span><h1 id="mapTitle">九域羁绊星图</h1></div><p id="mapStyleLabel">旋臂星系 · 历史时间流</p></header>
+        <div class="map-layout"><nav id="mapSubjects" class="map-subjects" aria-label="地图学科选择"></nav><section id="mapNetwork" class="map-network" aria-label="认知关系节点图"><canvas id="mapCosmosCanvas" aria-hidden="true"></canvas><div id="mapNodeLayer" class="map-node-layer"></div></section><aside id="mapDetail" class="map-detail"></aside></div>
+      </section>
+
+      <section id="profileScreen" class="screen app-screen profile-screen" hidden aria-labelledby="profileTitle">
+        <div class="profile-backdrop" aria-hidden="true"></div>
+        <header class="section-header"><button id="profileBack" class="back-arrow" type="button" aria-label="返回认知中枢">←</button><div><span>OBSERVER ARCHIVE · V2.0</span><h1 id="profileTitle">观测员档案</h1></div><p>去标识化测试数据可随时查看、汇总、导出与删除。</p></header>
+        <div class="profile-layout">
+          <section class="identity-card"><div class="identity-avatar" id="profileAvatar">观</div><p class="eyebrow">OBSERVER ID</p><h2 id="profileNicknameDisplay">星轨观察者</h2><span id="profileTitleText">LV.01 · 题目观察者</span><div class="profile-xp"><i><em id="profileXpBar"></em></i><small id="profileXpText">0 / 100 EXP</small></div><label>昵称<input id="nicknameInput" maxlength="12" value="星轨观察者" /></label><label>年级<select id="gradeSelect"><option>高一</option><option selected>高二</option><option>高三</option></select></label><button id="saveProfile" class="ghost-button ghost-button--wide" type="button">保存基本信息</button></section>
+          <section class="profile-main"><div class="profile-stats"><span><small>完成牌局</small><b id="statRounds">0</b></span><span><small>羁绊发现</small><b id="statBonds">0</b></span><span><small>伪羁绊</small><b id="statPseudo">0</b></span><span><small>探索值</small><b id="statXp">0</b></span></div><section class="profile-section"><header><div><span>SUBJECT PROGRESS</span><h2>九科星图进度</h2></div><button id="profileOpenMap" type="button">打开星图 ↗</button></header><div id="subjectProgress" class="subject-progress"></div></section><section class="profile-section"><header><div><span>RECENT DISCOVERIES</span><h2>最近发现</h2></div></header><div id="recentDiscoveries" class="recent-discoveries"></div></section></section>
+          <aside class="settings-card"><p class="eyebrow">LOCAL SETTINGS</p><h2>仪式设置</h2><label class="setting-row"><span><b>星海背景音乐</b><small>大厅舒展旋律，牌局进入节奏变奏</small></span><input id="musicSetting" type="checkbox" checked /></label><label class="setting-row"><span><b>游戏音效</b><small>选牌、星轨与翻牌反馈</small></span><input id="soundSetting" type="checkbox" checked /></label><label class="setting-row"><span><b>减少动态效果</b><small>缩短占测与翻牌过程</small></span><input id="motionSetting" type="checkbox" /></label><button id="resetGuide" class="ghost-button ghost-button--wide" type="button">下次重新显示新手引导</button><button id="openTestData" class="ghost-button ghost-button--wide test-data-entry" type="button">管理测试数据</button><button id="openDataCenter" class="ghost-button ghost-button--wide data-center-entry" type="button">打开测试数据中心</button><button id="openProfileSurvey" class="ghost-button ghost-button--wide" type="button">填写体验反馈</button><div class="save-state"><i></i><span><b id="telemetrySaveLabel">本地星盘已同步</b><small id="telemetrySaveDetail">测试记录准备中</small></span></div></aside>
+        </div>
+      </section>
+
+      <section id="telemetryConsent" class="telemetry-overlay" role="dialog" aria-modal="true" aria-labelledby="telemetryConsentTitle" hidden>
+        <div class="telemetry-panel telemetry-consent-panel">
+      <p class="eyebrow">PLAYTEST CONSENT · V2.0</p>
+          <h2 id="telemetryConsentTitle">帮助我们验证“寻找规律”是否真的好玩</h2>
+          <p>同意后，系统只记录去标识化玩法数据，例如进入了哪个界面、选择的学科和模式、每局尝试次数、用时、提示使用和反馈评分。</p>
+          <ul>
+            <li>不收集真实姓名、手机号、学校、精确位置或通讯录。</li>
+            <li>昵称只保存在本机；上传记录使用随机测试编号。</li>
+            <li>可以随时在个人中心导出、停止收集或删除本机记录。</li>
+          </ul>
+          <label class="telemetry-field"><span>测试员编号（可选，由组织者提供）</span><input id="consentTesterCode" maxlength="24" placeholder="例如 T018；不要填写姓名或学号" /></label>
+          <label class="telemetry-check"><input id="consentAgree" type="checkbox" /><span>我已了解并同意记录上述去标识化测试数据</span></label>
+          <label class="telemetry-check telemetry-check--subtle"><input id="consentOpenText" type="checkbox" /><span>允许上传我主动填写的开放题文字；不勾选时只记录字数</span></label>
+          <p class="telemetry-minor-note">若测试者未满14周岁，请先由监护人或测试组织方确认后再启用数据收集。</p>
+          <div class="telemetry-actions"><button id="declineTelemetry" class="ghost-button" type="button">仅在本机游玩</button><button id="acceptTelemetry" class="ritual-button ritual-button--compact" type="button" disabled><b>同意并开始测试</b><i>↗</i></button></div>
+        </div>
+      </section>
+
+      <section id="testDataPanel" class="telemetry-overlay" role="dialog" aria-modal="true" aria-labelledby="testDataTitle" hidden>
+        <div class="telemetry-panel telemetry-data-panel">
+          <button id="closeTestData" class="modal-close" type="button" aria-label="关闭测试数据面板">×</button>
+          <p class="eyebrow">PLAYTEST DATA CONTROL</p>
+          <h2 id="testDataTitle">测试数据管理</h2>
+          <div class="telemetry-status-grid">
+            <span><small>测试参与者</small><b id="telemetryParticipant">未启用</b></span>
+            <span><small>本机事件</small><b id="telemetryEventCount">0</b></span>
+            <span><small>已上传</small><b id="telemetryUploadedCount">0</b></span>
+            <span><small>数据状态</small><b id="telemetryConnection">仅本机</b></span>
+          </div>
+          <label class="telemetry-field"><span>测试员编号</span><input id="testDataTesterCode" maxlength="24" placeholder="可选；不要填写姓名或学号" /></label>
+          <label class="telemetry-check"><input id="testDataEnabled" type="checkbox" /><span>参与去标识化玩法测试</span></label>
+          <label class="telemetry-check telemetry-check--subtle"><input id="testDataOpenText" type="checkbox" /><span>允许上传开放题和反馈中的文字内容</span></label>
+          <p id="telemetryLastSync" class="telemetry-sync-copy">尚未连接数据接收服务，记录将安全保存在当前设备。</p>
+          <div class="telemetry-button-grid">
+            <button id="saveTestDataSettings" class="ghost-button" type="button">保存设置</button>
+            <button id="syncTestData" class="ghost-button" type="button">立即同步</button>
+            <button id="exportTestJson" class="ghost-button" type="button">导出 JSON</button>
+            <button id="exportTestCsv" class="ghost-button" type="button">导出 CSV</button>
+            <button id="openDataCenterFromPanel" class="ghost-button" type="button">查看数据中心</button>
+            <button id="deleteTestData" class="danger-button" type="button">删除测试记录</button>
+          </div>
+          <p class="telemetry-privacy-copy">删除会清除本机记录并停止后续收集；如数据已经上传，系统会同时向已配置的接收服务发送删除请求。</p>
+        </div>
+      </section>
+
+      <section id="playtestSurvey" class="telemetry-overlay" role="dialog" aria-modal="true" aria-labelledby="playtestSurveyTitle" hidden>
+        <form id="playtestSurveyForm" class="telemetry-panel telemetry-survey-panel">
+          <button id="closePlaytestSurvey" class="modal-close" type="button" aria-label="关闭体验反馈">×</button>
+          <p class="eyebrow">PLAYER SIGNAL</p>
+          <h2 id="playtestSurveyTitle">这一轮真的像在“破解规律”吗？</h2>
+          <p>请按1–5分评价。你的答案只用于改进测试版，不影响游戏成绩。</p>
+          <div class="survey-grid">
+            <label><span>寻找规律感</span><small>1 像普通答题 · 5 很像破解关系</small><select name="patternFeeling" required><option value="">请选择</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></label>
+            <label><span>趣味与爽感</span><small>1 无感 · 5 很想继续</small><select name="fun" required><option value="">请选择</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></label>
+            <label><span>规则清晰度</span><small>1 不知道做什么 · 5 完全清楚</small><select name="clarity" required><option value="">请选择</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></label>
+            <label><span>本轮难度</span><small>1 太简单 · 3 合适 · 5 太难</small><select name="difficulty" required><option value="">请选择</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></label>
+            <label><span>继续游玩意愿</span><small>1 不想继续 · 5 很想继续</small><select name="continueIntent" required><option value="">请选择</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select></label>
+            <label><span>最喜欢的模式</span><small>可以暂时没有答案</small><select name="favoriteMode"><option value="">暂不确定</option><option value="hard">困难模式</option><option value="journey">旅程模式</option><option value="master">大师模式</option><option value="decode">破译模式</option></select></label>
+          </div>
+          <label class="telemetry-field"><span>最想改进的地方（可选）</span><textarea name="comment" maxlength="300" rows="3" placeholder="如果没有允许上传开放文字，系统只会记录字数。"></textarea></label>
+          <div class="telemetry-actions"><button id="skipPlaytestSurvey" class="ghost-button" type="button">稍后再说</button><button class="ritual-button ritual-button--compact" type="submit"><b>提交反馈</b><i>↗</i></button></div>
+        </form>
+      </section>
+
+      <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    </main>
+    <script src="telemetry-config.js"></script>
+    <script src="telemetry.js"></script>
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
