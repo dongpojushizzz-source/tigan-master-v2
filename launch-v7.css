@@ -1,0 +1,826 @@
+.launch-screen {
+  color-scheme: dark;
+  --cyan: #58ecff;
+  --cyan-soft: rgba(86, 234, 255, 0.42);
+  --green: #27f598;
+  --violet: #a266ff;
+  --magenta: #ff55df;
+  --glitch-duration: 280ms;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: #02040d;
+}
+
+body {
+  font-family:
+    "Microsoft YaHei UI",
+    "PingFang SC",
+    system-ui,
+    sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.launch-screen {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  outline: none;
+  background: #02040d;
+}
+
+.launch-screen:focus-visible::after {
+  content: "";
+  position: fixed;
+  inset: 8px;
+  z-index: 100;
+  border: 1px solid rgba(88, 236, 255, 0.78);
+  box-shadow: 0 0 18px rgba(88, 236, 255, 0.24) inset;
+  pointer-events: none;
+}
+
+.stage {
+  position: relative;
+  width: min(100vw, calc(100vh * 1672 / 941));
+  height: min(100vh, calc(100vw * 941 / 1672));
+  aspect-ratio: 1672 / 941;
+  overflow: hidden;
+  isolation: isolate;
+  container-type: inline-size;
+  background: #050817;
+}
+
+/* 原图按源尺寸比例直接显示：无模糊、滤镜、缩放动画或二次压缩。 */
+.launch-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: auto;
+  filter: none;
+  transform: none;
+  animation: none;
+  pointer-events: none;
+  -webkit-user-drag: none;
+}
+
+.title-layer,
+.glitch-title,
+.screen-flash,
+.ripple-layer {
+  position: absolute;
+  inset: 0;
+}
+
+.title-layer {
+  z-index: 20;
+  pointer-events: none;
+}
+
+.glitch-title {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/*
+ * 背景中保留完整静态标题；伪元素只在触发时显示同标题的 RGB 横切片。
+ * 因此常态不会叠亮，触发时又能清楚看到赛博错位。
+ */
+.glitch-title::before,
+.glitch-title::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: url("assets/launch-v7-title-glitch.png") center / 100% 100% no-repeat;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.glitch-title::before {
+  clip-path: polygon(0 41.7%, 100% 41.7%, 100% 48.6%, 0 48.6%);
+  filter:
+    drop-shadow(-7px 0 rgba(71, 235, 255, 0.9))
+    drop-shadow(0 0 7px rgba(71, 235, 255, 0.58));
+}
+
+.glitch-title::after {
+  clip-path: polygon(0 49.6%, 100% 49.6%, 100% 57.8%, 0 57.8%);
+  filter:
+    drop-shadow(7px 0 rgba(255, 77, 220, 0.82))
+    drop-shadow(0 0 8px rgba(161, 92, 255, 0.54));
+}
+
+.glitch-title.is-glitching::before {
+  opacity: 0.82;
+  animation: glitch-cyan var(--glitch-duration) steps(2, end) both;
+}
+
+.glitch-title.is-glitching::after {
+  opacity: 0.74;
+  animation: glitch-magenta var(--glitch-duration) steps(2, end) both;
+}
+
+/* Demo 2 固定 UI：与 Demo 3 的背景和标题故障层相互独立。 */
+.ui-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.loading-bar-layer {
+  position: absolute;
+  left: 29.4%;
+  top: 60.7%;
+  width: 41.2%;
+  height: 7.9%;
+}
+
+.loading-bar {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  clip-path: polygon(3.7% 0, 96.2% 0, 100% 50%, 96.2% 100%, 3.7% 100%, 0 50%);
+  border: 1px solid rgba(96, 215, 255, 0.42);
+  background:
+    linear-gradient(104deg, rgba(9, 24, 55, 0.42), rgba(24, 30, 79, 0.34) 48%, rgba(65, 28, 110, 0.3)),
+    rgba(3, 9, 28, 0.32);
+  box-shadow:
+    0 0 15px rgba(56, 188, 255, 0.14),
+    inset 0 1px 0 rgba(192, 235, 255, 0.14),
+    inset 0 -1px 0 rgba(157, 98, 255, 0.14);
+  -webkit-backdrop-filter: blur(4px) saturate(1.08);
+  backdrop-filter: blur(4px) saturate(1.08);
+}
+
+.loading-bar::before,
+.loading-bar::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  width: 17%;
+  opacity: 0.5;
+}
+
+.loading-bar::before {
+  left: 0;
+  background: linear-gradient(90deg, rgba(37, 205, 255, 0.12), transparent);
+}
+
+.loading-bar::after {
+  right: 0;
+  background: linear-gradient(270deg, rgba(157, 98, 255, 0.13), transparent);
+}
+
+.loading-copy {
+  position: relative;
+  z-index: 4;
+  margin: 0;
+  color: rgba(249, 252, 255, 0.98);
+  font-size: 1.28cqw;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  text-shadow: none;
+  transform: none;
+  filter: none;
+  animation: none;
+}
+
+.status-core {
+  position: absolute;
+  z-index: 5;
+  left: 15.2%;
+  top: 50%;
+  width: 5.2%;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(63, 255, 169, 0.75);
+  background: rgba(10, 90, 68, 0.18);
+  box-shadow:
+    0 0 5px var(--green),
+    0 0 16px rgba(39, 245, 152, 0.46),
+    inset 0 0 8px rgba(39, 245, 152, 0.34);
+  transform: translateY(-50%);
+  animation: core-pulse 2.25s ease-in-out infinite;
+}
+
+.status-core::before,
+.status-core::after {
+  content: "";
+  position: absolute;
+  inset: -24%;
+  border-radius: 50%;
+  border: 1px solid rgba(39, 245, 152, 0.34);
+  animation: core-ring 2.25s ease-out infinite;
+}
+
+.status-core::after {
+  animation-delay: 1.1s;
+}
+
+.status-core__inner {
+  width: 47%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #b2ffd8;
+  box-shadow: 0 0 9px var(--green);
+}
+
+.tech-wing {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  width: 12%;
+  height: 38%;
+  display: flex;
+  align-items: center;
+  gap: 5%;
+  opacity: 0.48;
+}
+
+.tech-wing--left {
+  left: 2.5%;
+  justify-content: flex-end;
+  transform: translateY(-50%);
+}
+
+.tech-wing--right {
+  right: 2.5%;
+  justify-content: flex-start;
+  transform: translateY(-50%) scaleX(-1);
+}
+
+.tech-wing i {
+  display: block;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--cyan));
+  box-shadow: 0 0 5px var(--cyan-soft);
+  animation: signal-blink 1.8s steps(2) infinite;
+}
+
+.tech-wing i:nth-child(1) {
+  width: 28%;
+}
+
+.tech-wing i:nth-child(2) {
+  width: 44%;
+  animation-delay: 0.3s;
+}
+
+.tech-wing i:nth-child(3) {
+  width: 18%;
+  animation-delay: 0.62s;
+}
+
+.signal-bars {
+  position: absolute;
+  z-index: 4;
+  right: 13.4%;
+  bottom: 25%;
+  height: 30%;
+  display: flex;
+  align-items: end;
+  gap: 3px;
+  opacity: 0.5;
+}
+
+.signal-bars i {
+  width: 2px;
+  height: 30%;
+  background: var(--cyan);
+  box-shadow: 0 0 5px var(--cyan);
+  animation: signal-jump 900ms ease-in-out infinite alternate;
+}
+
+.signal-bars i:nth-child(2) {
+  animation-delay: 120ms;
+}
+
+.signal-bars i:nth-child(3) {
+  animation-delay: 260ms;
+}
+
+.signal-bars i:nth-child(4) {
+  animation-delay: 420ms;
+}
+
+.signal-bars i:nth-child(5) {
+  animation-delay: 560ms;
+}
+
+.loading-sweep {
+  position: absolute;
+  z-index: 2;
+  top: 7%;
+  left: 4%;
+  width: 16%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(143, 235, 255, 0.76), transparent);
+  mix-blend-mode: screen;
+  animation: edge-glint 5.2s ease-in-out infinite;
+}
+
+.enter-text-layer {
+  position: absolute;
+  left: 39%;
+  top: 72.6%;
+  width: 22%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 0;
+  box-shadow: none;
+}
+
+.enter-copy {
+  color: rgba(249, 251, 255, 0.98);
+  font-size: 1.52cqw;
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: 0.14em;
+  white-space: nowrap;
+  background: none;
+  border: 0;
+  box-shadow: none;
+  text-shadow: none;
+  transform: none;
+  filter: none;
+  opacity: 1;
+  animation: enter-text-fade 2.9s ease-in-out infinite;
+  will-change: opacity;
+}
+
+.hud-layer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 8.4%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4.5%;
+  overflow: hidden;
+  color: rgba(184, 226, 255, 0.72);
+  border-top: 1px solid rgba(88, 219, 255, 0.28);
+  background:
+    linear-gradient(90deg, rgba(8, 21, 54, 0.48), rgba(16, 15, 62, 0.28) 50%, rgba(8, 21, 54, 0.48)),
+    rgba(2, 7, 26, 0.24);
+  box-shadow:
+    0 -7px 25px rgba(23, 40, 94, 0.12),
+    inset 0 1px 0 rgba(144, 222, 255, 0.08);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+}
+
+.hud-scan {
+  position: absolute;
+  inset-block: 0;
+  left: -22%;
+  width: 18%;
+  background: linear-gradient(90deg, transparent, rgba(86, 234, 255, 0.11), transparent);
+  transform: skewX(-18deg);
+  animation: hud-scan 7s linear infinite;
+}
+
+.hud-module {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.8cqw;
+  width: 34%;
+  height: 100%;
+}
+
+.hud-module--right {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.hud-ring {
+  position: relative;
+  width: 2.7cqw;
+  aspect-ratio: 1;
+  border: 1px solid rgba(86, 234, 255, 0.55);
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(86, 234, 255, 0.22);
+  animation: hud-ring-spin 7s linear infinite;
+}
+
+.hud-ring::before,
+.hud-ring::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  border: 1px dashed rgba(166, 87, 255, 0.46);
+}
+
+.hud-ring::before {
+  inset: 18%;
+}
+
+.hud-ring::after {
+  inset: 36%;
+  border-color: rgba(86, 234, 255, 0.82);
+  background: rgba(86, 234, 255, 0.1);
+}
+
+.hud-ring i {
+  position: absolute;
+  left: 50%;
+  top: -8%;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 6px var(--cyan);
+}
+
+.hud-copy {
+  min-width: 8.5cqw;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2cqw;
+}
+
+.hud-copy b {
+  color: rgba(142, 222, 255, 0.62);
+  font-family: Consolas, "SFMono-Regular", monospace;
+  font-size: 0.55cqw;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+}
+
+.hud-copy span {
+  color: rgba(225, 240, 255, 0.76);
+  font-size: 0.72cqw;
+  letter-spacing: 0.12em;
+}
+
+.hud-wave {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 1.4cqw;
+}
+
+.hud-wave i {
+  width: 2px;
+  height: 22%;
+  background: var(--cyan);
+  opacity: 0.58;
+  box-shadow: 0 0 4px var(--cyan);
+  animation: hud-wave 1.2s ease-in-out infinite alternate;
+}
+
+.hud-wave i:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.hud-wave i:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.hud-wave i:nth-child(4) {
+  animation-delay: 0.6s;
+}
+
+.hud-wave i:nth-child(5) {
+  animation-delay: 0.8s;
+}
+
+.hud-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.42cqw;
+  opacity: 0.48;
+}
+
+.hud-center span {
+  width: 0.32cqw;
+  aspect-ratio: 1;
+  border: 1px solid rgba(86, 234, 255, 0.75);
+  animation: hud-dot 2s steps(2) infinite;
+}
+
+.hud-center span:nth-child(even) {
+  animation-delay: 0.6s;
+}
+
+.hud-center i {
+  width: 0.58cqw;
+  aspect-ratio: 1;
+  margin: 0 0.35cqw;
+  transform: rotate(45deg);
+  border: 1px solid rgba(190, 129, 255, 0.78);
+  box-shadow: 0 0 6px rgba(166, 87, 255, 0.38);
+}
+
+.hud-signal {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.16cqw;
+  width: 2.6cqw;
+  height: 2.3cqw;
+  padding: 0.38cqw;
+  border: 1px solid rgba(86, 234, 255, 0.35);
+  border-radius: 50%;
+}
+
+.hud-signal i {
+  flex: 1;
+  height: 35%;
+  background: linear-gradient(to top, var(--cyan), rgba(166, 87, 255, 0.9));
+  box-shadow: 0 0 4px rgba(86, 234, 255, 0.48);
+  animation: signal-jump 1.1s ease-in-out infinite alternate;
+}
+
+.hud-signal i:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.hud-signal i:nth-child(3) {
+  animation-delay: 0.42s;
+}
+
+.hud-signal i:nth-child(4) {
+  animation-delay: 0.66s;
+}
+
+.screen-flash {
+  z-index: 40;
+  opacity: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.16),
+    rgba(86, 228, 255, 0.08) 30%,
+    transparent 66%
+  );
+}
+
+.launch-screen.is-entering .screen-flash {
+  animation: screen-confirm 720ms ease-out both;
+}
+
+.ripple-layer {
+  z-index: 41;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.click-ripple {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  margin: -12px 0 0 -12px;
+  border: 1px solid rgba(126, 239, 255, 0.9);
+  border-radius: 50%;
+  box-shadow:
+    0 0 12px rgba(86, 231, 255, 0.72),
+    inset 0 0 8px rgba(156, 97, 255, 0.45);
+  animation: click-ripple 620ms ease-out both;
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+@keyframes glitch-cyan {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+  14% {
+    transform: translate3d(-10px, 0, 0);
+    opacity: 0.96;
+  }
+  36% {
+    transform: translate3d(6px, -1px, 0);
+    opacity: 0.72;
+  }
+  58% {
+    transform: translate3d(-5px, 1px, 0);
+    opacity: 0.9;
+  }
+  78% {
+    transform: translate3d(3px, 0, 0);
+    opacity: 0.58;
+  }
+}
+
+@keyframes glitch-magenta {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+  18% {
+    transform: translate3d(9px, 1px, 0);
+    opacity: 0.88;
+  }
+  42% {
+    transform: translate3d(-7px, 0, 0);
+    opacity: 0.68;
+  }
+  66% {
+    transform: translate3d(5px, -1px, 0);
+    opacity: 0.86;
+  }
+  82% {
+    transform: translate3d(-3px, 0, 0);
+    opacity: 0.5;
+  }
+}
+
+@keyframes core-pulse {
+  0%,
+  100% {
+    transform: translateY(-50%) scale(0.94);
+  }
+  50% {
+    transform: translateY(-50%) scale(1.06);
+  }
+}
+
+@keyframes core-ring {
+  0% {
+    transform: scale(0.68);
+    opacity: 0;
+  }
+  34% {
+    opacity: 0.62;
+  }
+  100% {
+    transform: scale(1.45);
+    opacity: 0;
+  }
+}
+
+@keyframes signal-blink {
+  0%,
+  44% {
+    opacity: 0.24;
+  }
+  45%,
+  76% {
+    opacity: 0.82;
+  }
+  77%,
+  100% {
+    opacity: 0.36;
+  }
+}
+
+@keyframes signal-jump {
+  to {
+    height: 92%;
+    opacity: 1;
+  }
+}
+
+@keyframes edge-glint {
+  0%,
+  20% {
+    left: 4%;
+    opacity: 0;
+  }
+  38% {
+    opacity: 0.2;
+  }
+  70%,
+  100% {
+    left: 82%;
+    opacity: 0;
+  }
+}
+
+/* 进入提示仅通过透明度呼吸，不产生黑框、阴影或位移。 */
+@keyframes enter-text-fade {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes hud-scan {
+  to {
+    left: 112%;
+  }
+}
+
+@keyframes hud-ring-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes hud-wave {
+  to {
+    height: 92%;
+    opacity: 0.96;
+  }
+}
+
+@keyframes hud-dot {
+  50% {
+    opacity: 0.2;
+  }
+}
+
+@keyframes screen-confirm {
+  0% {
+    opacity: 0;
+  }
+  24% {
+    opacity: 0.88;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes click-ripple {
+  from {
+    opacity: 0.95;
+    transform: scale(0.45);
+  }
+  to {
+    opacity: 0;
+    transform: scale(6.5);
+  }
+}
+
+@media (max-aspect-ratio: 4 / 3), (max-width: 760px) {
+  .hud-copy b,
+  .hud-copy span,
+  .hud-wave {
+    display: none;
+  }
+
+  .hud-module {
+    width: 18%;
+  }
+
+  .hud-module--right {
+    justify-content: flex-end;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .enter-copy {
+    opacity: 1;
+  }
+}
